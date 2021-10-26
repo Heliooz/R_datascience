@@ -1,17 +1,21 @@
 rm(list = ls())
 
 library(tidyverse)
-library(tmap)
-library(tmaptools)
 library(sf)
-library(spData)
-library(spDataLarge)
+library(rnaturalearth)
+library(rnaturalearthdata)
 
-data <- read.csv("Listings.csv")
-data <- as.data.frame(data)
+data <- as.data.frame(read.csv("Listings.csv"))
+paris <- filter(data, city=="Paris")
 
-paris <- filter(data, city=="Paris", price<= 500)
+ggplot(paris, aes(x=longitude, y=latitude, color=neighbourhood)) + geom_point()
 
+map_arrondissements <- as.data.frame(read_delim("arrondissements.csv", delim = ';'))
+map_arrondissements <- map_arrondissements['geom']
+
+ggplot()
+
+test <- geojsonsf::geojson_sf(map_arrondissements)
 
 
 
