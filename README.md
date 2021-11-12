@@ -88,105 +88,105 @@ R_datascience
 
  >## Permet l'organisation du dashboard ##
  >
- >ui <- dashboardPage(
+ > ui <- dashboardPage(
  >  
- >  ## Affiche le titre du dashboard ##
- >  dashboardHeader(title = "Les meilleurs airBnB"),
+ >   ## Affiche le titre du dashboard ##
+ >   dashboardHeader(title = "Les meilleurs airBnB"),
  >  
- >  ## Permet de creer plusieurs onglets pour le dashboard ##
- >  dashboardSidebar(
+ >   ## Permet de creer plusieurs onglets pour le dashboard ##
+ >   dashboardSidebar(
  >    
- >    sidebarMenu(
- >      menuItem("AirBnB les plus rentables", tabName = "cheapest_value"),
- >      menuItem("AirBnB les mieux notes", tabName = "better_place"),
- >      menuItem("Localisation des airBnB", tabName = "localisation")
- >    )
- >  ),
+ >     sidebarMenu(
+ >       menuItem("AirBnB les plus rentables", tabName = "cheapest_value"),
+ >       menuItem("AirBnB les mieux notes", tabName = "better_place"),
+ >       menuItem("Localisation des airBnB", tabName = "localisation")
+ >     )
+ >   ),
  >  
- >  ## Organisation des differentes fenetres ##
- >  dashboardBody(
+ >   ## Organisation des differentes fenetres ##
+ >   dashboardBody(
  >    
- >    tabItems(
+ >     tabItems(
  >      
- >      ## Premier onglet qui contiendra nos input (ville, nombre de locataires, nombre de chambre) ##
- >      ## ainsi que l'histogramme des dix arrondissements les moins cher de la ville en plus de la  ##
- >      ## liste des cinq etablissements les moins chers ##
- >      tabItem("cheapest_value",
- >              fluidRow(box(selectInput("v_city", "Ville", selected = "Paris",
- >                                       choices = airBnB_data %>%
- >                                         select(city) %>%
- >                                         distinct() %>%
- >                                         arrange(city)))),
- >              fluidRow(box(sliderInput("v_accommodates", "Nombre de locataires", 1, 15, value = 2)),
- >                       box(sliderInput("v_bedrooms", "Nombre de chambre", 1, 10, value = 1))),
- >              fluidRow(box(plotOutput("mean_price_by_neighbourhood")), 
- >                       box(dataTableOutput("cheapest_airBnB"), "Les 5 etablissements les moins chers")),
- >      ),
+ >       ## Premier onglet qui contiendra nos input (ville, nombre de locataires, nombre de chambre) ##
+ >       ## ainsi que l'histogramme des dix arrondissements les moins cher de la ville en plus de la  ##
+ >       ## liste des cinq etablissements les moins chers ##
+ >       tabItem("cheapest_value",
+ >               fluidRow(box(selectInput("v_city", "Ville", selected = "Paris",
+ >                                        choices = airBnB_data %>%
+ >                                          select(city) %>%
+ >                                          distinct() %>%
+ >                                          arrange(city)))),
+ >               fluidRow(box(sliderInput("v_accommodates", "Nombre de locataires", 1, 15, value = 2)),
+ >                        box(sliderInput("v_bedrooms", "Nombre de chambre", 1, 10, value = 1))),
+ >               fluidRow(box(plotOutput("mean_price_by_neighbourhood")), 
+ >                        box(dataTableOutput("cheapest_airBnB"), "Les 5 etablissements les moins chers")),
+ >       ),
  >      
- >      ## Deuxieme onglet qui contiendra les differents scores des hotes puis la moyenne des scores ##
- >      ## par quartier ##
- >      tabItem("better_place",
- >              fluidRow(box(plotOutput("a_city_compare_to_the_world")),
- >                       box(dataTableOutput("list_of_score_by_neighbourhood"), "Moyennes de scores par quartier"))
- >              ),
+ >       ## Deuxieme onglet qui contiendra les differents scores des hotes puis la moyenne des scores ##
+ >       ## par quartier ##
+ >       tabItem("better_place",
+ >               fluidRow(box(plotOutput("a_city_compare_to_the_world")),
+ >                        box(dataTableOutput("list_of_score_by_neighbourhood"), "Moyennes de scores par quartier"))
+ >               ),
  >      
- >      ## Troisieme onglet, la carte ##
- >      tabItem("localisation",
- >              fluidPage(
- >                titlePanel("Les cinq AirBnB les plus rentables"),
- >                mainPanel(leafletOutput("map"))
- >              )
- >      )
- >    )
- >  )
- >) 
+ >       ## Troisieme onglet, la carte ##
+ >       tabItem("localisation",
+ >               fluidPage(
+ >                 titlePanel("Les cinq AirBnB les plus rentables"),
+ >                 mainPanel(leafletOutput("map"))
+ >               )
+ >       )
+ >     )
+ >   )
+ > ) 
 
  Maintenant, server.R qui contient les fonction qui vont faire apparaître ce que
  l'on désire sur le graphe
 
- >server <- function(input, output){
+ > server <- function(input, output){
  >  
- >  ## Dataframe de la map qui nous permet de filtrer avec nos input ##
- >  data_for_map <-  reactive({
- >    airBnB_data %>%
- >      filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms,
- >             host_is_superhost == "t") %>%
- >      arrange(price) %>%
- >      head()
- >  })
+ >   ## Dataframe de la map qui nous permet de filtrer avec nos input ##
+ >   data_for_map <-  reactive({
+ >     airBnB_data %>%
+ >       filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms,
+ >              host_is_superhost == "t") %>%
+ >       arrange(price) %>%
+ >       head()
+ >   })
  >  
- >  ## Affichage de la carte du monde ##
- >  output$map <- renderLeaflet({
- >    leaflet(airBnB_data) %>%
- >      addTiles() %>%
- >      fitBounds(~min(longitude), ~min(latitude), ~max(longitude), ~max(latitude))
- >  })
+ >   ## Affichage de la carte du monde ##
+ >   output$map <- renderLeaflet({
+ >     leaflet(airBnB_data) %>%
+ >       addTiles() %>%
+ >       fitBounds(~min(longitude), ~min(latitude), ~max(longitude), ~max(latitude))
+ >   })
  >  
- >  ## Place les curseurs des cinq airBnB les moins cher sur la carte ##
- >  ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
- >  observe({
- >    leafletProxy("map", data = data_for_map()) %>%
- >      clearShapes() %>%
- >      addMarkers(label = ~listing_id)
- >  })
+ >   ## Place les curseurs des cinq airBnB les moins cher sur la carte ##
+ >   ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
+ >   observe({
+ >     leafletProxy("map", data = data_for_map()) %>%
+ >       clearShapes() %>%
+ >       addMarkers(label = ~listing_id)
+ >   })
  >  
- >  ## Met dans un graphe les moyenne des prix par arrondissements ##
- >  ## On gardera les 10 premiers ##
- >  ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
- >  output$mean_price_by_neighbourhood <- renderPlot({
- >    airBnB_data %>%
- >      filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms) %>%
- >      select(price, city, neighbourhood) %>%
- >      group_by(neighbourhood) %>%
- >      summarise(price = mean(price)) %>%
- >      ungroup() %>%
- >      arrange(price) %>%
- >      slice(1:10) %>%
- >      ggplot(aes(x = price, y = neighbourhood)) + geom_col() + 
- >      xlab("prix par nuit") + 
- >      ylab("arrondissement") +
- >      labs(title = "Prix moyen pour les 10 arrondissement les moins chers")
- >  })
+ >   ## Met dans un graphe les moyenne des prix par arrondissements ##
+ >   ## On gardera les 10 premiers ##
+ >   ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
+ >   output$mean_price_by_neighbourhood <- renderPlot({
+ >     airBnB_data %>%
+ >       filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms) %>%
+ >       select(price, city, neighbourhood) %>%
+ >       group_by(neighbourhood) %>%
+ >       summarise(price = mean(price)) %>%
+ >       ungroup() %>%
+ >        arrange(price) %>%
+ >       slice(1:10) %>%
+ >       ggplot(aes(x = price, y = neighbourhood)) + geom_col() + 
+ >       xlab("prix par nuit") + 
+ >        ylab("arrondissement") +
+ >       labs(title = "Prix moyen pour les 10 arrondissement les moins chers")
+ >   })
  >  
  >  ## Classe les moyenne des scores par arrondissements ##
  >  ## On gardera les 10 premiers ##
