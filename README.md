@@ -54,12 +54,12 @@ R_datascience
  Voici le main_r.R qui lance le programme.
  
   Appel des fichier code 
-  
- >source("global.R")
+ 
+ 	source("global.R")
 
- source("ui.R")
+	source("ui.R")
 
- source("server.R")    
+	source("server.R")    
  
   demarage de l'application 
   
