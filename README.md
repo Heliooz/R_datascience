@@ -58,14 +58,14 @@ R_datascience
 
  >## librairies utilisees ##
  >library(tidyverse)
- >library(shiny)
- >library(gapminder)
- >library(dplyr)
- >library(ggplot2)
- >library(shinydashboard)
- >library(tidyr)
- >library(broom)
- >library(leaflet)
+ library(shiny)
+ library(gapminder)
+ library(dplyr)
+ library(ggplot2)
+ library(shinydashboard)
+ library(tidyr)
+ library(broom)
+ library(leaflet)
  >
  >## lecture du fichier csv ##
  >airBnB_data <- read.csv("listings.csv")
