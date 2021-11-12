@@ -71,7 +71,7 @@ R_datascience
   librairies utilisees 
   
  >library(tidyverse)
- library(shiny)
+  library(shiny)
  
  >library(gapminder)
  
