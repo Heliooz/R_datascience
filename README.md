@@ -262,6 +262,7 @@ R_datascience
  
  
    Affiche les 5 AirBnB les moins cher de la ville  
+   On va aussi prendre un hôte qui est super_host pour avoir une meilleur fiabilité (un airBnB à 8 euros à Paris c'est rare)
    la ville, le nombre de chambre et le nombre de locataires sont connus  
    
    
