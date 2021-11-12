@@ -101,17 +101,19 @@ R_datascience
 
  ### ui.R va contenir le corps du dashboard, ses graphiques, input, sa carte.
 
-  Permet l'organisation du dashboard 
+ Permet l'organisation du dashboard 
+  
   
 	ui <- dashboardPage(
  
  
-      Affiche le titre du dashboard 
+  Affiche le titre du dashboard 
+
 
 	dashboardHeader(title = "Les meilleurs airBnB"),
  
  
-    Permet de creer plusieurs onglets pour le dashboard 
+   Permet de creer plusieurs onglets pour le dashboard 
 
 
 	dashboardSidebar(
