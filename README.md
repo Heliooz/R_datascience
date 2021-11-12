@@ -57,9 +57,9 @@ R_datascience
   
  >source("global.R")
 
- >source("ui.R")
+ source("ui.R")
 
- >source("server.R")    
+ source("server.R")    
  
   demarage de l'application 
   
@@ -71,8 +71,7 @@ R_datascience
   librairies utilisees 
   
  >library(tidyverse)
- 
- >library(shiny)
+ library(shiny)
  
  >library(gapminder)
  
