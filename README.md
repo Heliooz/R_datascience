@@ -55,9 +55,9 @@ R_datascience
 
 	source("server.R")    
  
-  demarage de l'application 
+  demarrage de l'application 
   
- >shinyApp(ui, server)
+	shinyApp(ui, server)
 
  ### global.R ci-dessous contient les différentes librairies utilisées, la lecture
  ### du fichier .csv ainsi que les colonnes qu'on enlève de notre dataframe.
