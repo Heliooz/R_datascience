@@ -56,7 +56,9 @@ R_datascience
   Appel des fichier code 
   
  >source("global.R")
+
  >source("ui.R")
+
  >source("server.R")    
  
   demarage de l'application 
