@@ -45,32 +45,37 @@ R_datascience
 
  Voici le main_r.R qui lance le programme.
  
- >## Appel des fichier code ##
+  Appel des fichier code 
+  
  >source("global.R")
  >source("ui.R")
  >source("server.R")    
- >
- >## demarage de l'application ##
+ 
+  demarage de l'application 
+  
  >shinyApp(ui, server)
 
- global.R ci-dessous contient les différentes librairies utilisées, la lecture
- du fichier .csv ainsi que les colonnes qu'on enlève de notre dataframe.
+ ### global.R ci-dessous contient les différentes librairies utilisées, la lecture
+ ### du fichier .csv ainsi que les colonnes qu'on enlève de notre dataframe.
 
- >## librairies utilisees ##
+  librairies utilisees 
+  
  >library(tidyverse)
- library(shiny)
- library(gapminder)
- library(dplyr)
- library(ggplot2)
- library(shinydashboard)
- library(tidyr)
- library(broom)
- library(leaflet)
- >
- >## lecture du fichier csv ##
+ >library(shiny)
+ >library(gapminder)
+ >library(dplyr)
+ >library(ggplot2)
+ >library(shinydashboard)
+ >library(tidyr)
+ >library(broom)
+ >library(leaflet)
+ 
+  lecture du fichier csv 
+  
  >airBnB_data <- read.csv("listings.csv")
- >
- >## colonnes que nous n'utilisons pas ##
+ 
+  colonnes que nous n'utilisons pas 
+ 
  >airBnB_data$amenities <- NULL
  >airBnB_data$host_location <- NULL
  >airBnB_data$host_since <- NULL
@@ -84,16 +89,21 @@ R_datascience
  >airBnB_data$maximum_nights <- NULL
  >airBnB_data$instant_bookable <- NULL
 
- ui.R va contenir le corps du dashboard, ses graphiques, input, sa carte.
+ ### ui.R va contenir le corps du dashboard, ses graphiques, input, sa carte.
 
- >## Permet l'organisation du dashboard ##
- >
+  Permet l'organisation du dashboard 
+  
  > ui <- dashboardPage(
- >  
- >   ## Affiche le titre du dashboard ##
+ 
+ 
+      Affiche le titre du dashboard 
+
  >   dashboardHeader(title = "Les meilleurs airBnB"),
- >  
- >   ## Permet de creer plusieurs onglets pour le dashboard ##
+ 
+ 
+    Permet de creer plusieurs onglets pour le dashboard 
+
+
  >   dashboardSidebar(
  >    
  >     sidebarMenu(
@@ -102,15 +112,21 @@ R_datascience
  >       menuItem("Localisation des airBnB", tabName = "localisation")
  >     )
  >   ),
- >  
- >   ## Organisation des differentes fenetres ##
+
+
+     Organisation des differentes fenetres
+
+
  >   dashboardBody(
  >    
  >     tabItems(
- >      
- >       ## Premier onglet qui contiendra nos input (ville, nombre de locataires, nombre de chambre) ##
- >       ## ainsi que l'histogramme des dix arrondissements les moins cher de la ville en plus de la  ##
- >       ## liste des cinq etablissements les moins chers ##
+
+
+   Premier onglet qui contiendra nos input (ville, nombre de locataires, nombre de chambre)
+   ainsi que l'histogramme des dix arrondissements les moins cher de la ville en plus de la   
+   liste des cinq etablissements les moins chers 
+   
+   
  >       tabItem("cheapest_value",
  >               fluidRow(box(selectInput("v_city", "Ville", selected = "Paris",
  >                                        choices = airBnB_data %>%
@@ -122,9 +138,12 @@ R_datascience
  >               fluidRow(box(plotOutput("mean_price_by_neighbourhood")), 
  >                        box(dataTableOutput("cheapest_airBnB"), "Les 5 etablissements les moins chers")),
  >       ),
- >      
- >       ## Deuxieme onglet qui contiendra les differents scores des hotes puis la moyenne des scores ##
- >       ## par quartier ##
+ 
+ 
+   Deuxieme onglet qui contiendra les differents scores des hotes puis la moyenne des scores  
+   par quartier  
+   
+   
  >       tabItem("better_place",
  >               fluidRow(box(plotOutput("a_city_compare_to_the_world")),
  >                        box(dataTableOutput("list_of_score_by_neighbourhood"), "Moyennes de scores par quartier"))
@@ -141,12 +160,15 @@ R_datascience
  >   )
  > ) 
 
- Maintenant, server.R qui contient les fonction qui vont faire apparaître ce que
- l'on désire sur le graphe
+ ### server.R qui contient les fonction qui vont faire apparaître ce que
+ ### l'on désire sur le graphe
 
  > server <- function(input, output){
- >  
- >   ## Dataframe de la map qui nous permet de filtrer avec nos input ##
+ 
+ 
+   Dataframe de la map qui nous permet de filtrer avec nos input  
+   
+   
  >   data_for_map <-  reactive({
  >     airBnB_data %>%
  >       filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms,
@@ -154,25 +176,33 @@ R_datascience
  >       arrange(price) %>%
  >       head()
  >   })
- >  
- >   ## Affichage de la carte du monde ##
+
+   Affichage de la carte du monde  
+   
+   
  >   output$map <- renderLeaflet({
  >     leaflet(airBnB_data) %>%
  >       addTiles() %>%
  >       fitBounds(~min(longitude), ~min(latitude), ~max(longitude), ~max(latitude))
  >   })
- >  
- >   ## Place les curseurs des cinq airBnB les moins cher sur la carte ##
- >   ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
+ 
+   Place les curseurs des cinq airBnB les moins cher sur la carte 
+   
+   
+   la ville, le nombre de chambre et le nombre de locataires sont connus  
+   
+   
  >   observe({
  >     leafletProxy("map", data = data_for_map()) %>%
  >       clearShapes() %>%
  >       addMarkers(label = ~listing_id)
  >   })
- >  
- >   ## Met dans un graphe les moyenne des prix par arrondissements ##
- >   ## On gardera les 10 premiers ##
- >   ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
+
+   Met dans un graphe les moyenne des prix par arrondissements  
+   On gardera les 10 premiers  
+   la ville, le nombre de chambre et le nombre de locataires sont connus 
+   
+   
  >   output$mean_price_by_neighbourhood <- renderPlot({
  >     airBnB_data %>%
  >       filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms) %>%
@@ -186,11 +216,14 @@ R_datascience
  >       xlab("prix par nuit") + 
  >        ylab("arrondissement") +
  >       labs(title = "Prix moyen pour les 10 arrondissement les moins chers")
- >   })
- >  
- >  ## Classe les moyenne des scores par arrondissements ##
- >  ## On gardera les 10 premiers ##
- >  ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
+ >   }) 
+ 
+ 
+   Classe les moyenne des scores par arrondissements  
+   On gardera les 10 premiers  
+   la ville, le nombre de chambre et le nombre de locataires sont connus  
+   
+   
  >  output$list_of_score_by_neighbourhood <- renderDataTable({
  >    airBnB_data %>%
  >      filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms) %>%
@@ -201,10 +234,12 @@ R_datascience
  >      arrange(desc(review_scores_rating)) %>%
  >      slice(1:10)
  >  })
- >  
- >  ## Ici, on va utiliser les outils de la librairie broom afin de faire des calculs statistiques ##
- >  ## pour ainsi comparer chacun des scores des airBnB d'une ville a ceux des autres villes ##
- >  ## La ville est connue ##
+
+   Ici, on va utiliser les outils de la librairie broom afin de faire des calculs statistiques  
+   pour ainsi comparer chacun des scores des airBnB d'une ville a ceux des autres villes  
+   La ville est connue 
+   
+   
  >  output$a_city_compare_to_the_world <- renderPlot({
  >    airBnB_data %>%
  >      select(city, review_scores_accuracy:review_scores_value) %>%
@@ -219,10 +254,12 @@ R_datascience
  >      xlab("Review score") + ylab("Estimations") +
  >      labs(title = "Comment les scores sont differents entre ici et le reste du monde en moyenne")
  >  })
- >  
- >  
- >  ## Affiche les 5 AirBnB les moins cher de la ville ##
- >  ## la ville, le nombre de chambre et le nombre de locataires sont connus ##
+ 
+ 
+   Affiche les 5 AirBnB les moins cher de la ville  
+   la ville, le nombre de chambre et le nombre de locataires sont connus  
+   
+   
  >  output$cheapest_airBnB <- renderDataTable ({
  >    airBnB_data %>%
  >      filter(city == input$v_city, accommodates == input$v_accommodates, bedrooms == input$v_bedrooms,
