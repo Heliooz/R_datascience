@@ -29,12 +29,20 @@ R_datascience
  Il faut télécharger la data car trop volumineuse sur git, lien:
   [Dataset](https://www.kaggle.com/mysarahmadbhat/airbnb-listings-reviews).
     
- packages utilisés: -gapminder
+ packages utilisés: 
+ 
+ 	-gapminder
+	
 	-dplyr 
+	
 	-ggplot2
+	
 	-shinydashboard
+	
 	-broom
+	
 	-leaflet
+	
  Pour lancer l'appliquation, ouvrez main_r.R, et cliquez sur run App.
  Choisissez la ville où vous souhaitez partir ainsi que votre nombre de 
  locataires et de chambre.
