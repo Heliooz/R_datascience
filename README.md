@@ -1,6 +1,8 @@
 R_datascience
 
  # AirBnB data
+ 
+ Demay Jérémy, Clément Maurer
 
 
  ## Rapport d'analyse
