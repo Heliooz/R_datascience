@@ -1,11 +1,9 @@
 R_datascience
 
- # Heading
- AirBnB data
+ # AirBnB data
 
 
- ## Heading
- Rapport d'analyse
+ ## Rapport d'analyse
 
  
  L'objectif de ce projet est de comprendre comment sont répartis les scores des         utilisateurs, mais aussi les prix des airBnB dans l'objectif d'augmenter au maximum le rapport qualité/prix.
@@ -18,8 +16,7 @@ R_datascience
  moins chers d'une ville.
 
 
- ## Heading
- User Guide
+ ## User Guide
 
 
  Il faut télécharger la data car trop volumineuse sur git, lien:
@@ -42,8 +39,7 @@ R_datascience
  Pour lancer l'appliquation, ouvrez main_r.R, et cliquez sur run App. Choisissez la ville où vous souhaitez partir ainsi que votre nombre de locataires et de chambre.
 
 
- ## Heading
- Developper Guide
+ ## Developper Guide
 
  Voici le main_r.R qui lance le programme.
  
